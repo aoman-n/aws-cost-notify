@@ -1,4 +1,4 @@
-package clients
+package client
 
 import (
 	"aws-billing-notify/domain"

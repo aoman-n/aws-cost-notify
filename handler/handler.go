@@ -1,7 +1,7 @@
 package handler
 
 import (
-	"aws-billing-notify/clients"
+	"aws-billing-notify/client"
 	"fmt"
 	"log"
 	"os"
@@ -10,11 +10,11 @@ import (
 )
 
 type Handler struct {
-	awsClient clients.AwsBillinger
-	noticeClient clients.Notifier
+	awsClient client.AwsBillinger
+	noticeClient client.Notifier
 }
 
-func New(awsClient clients.AwsBillinger, noticeClient clients.Notifier) *Handler {
+func New(awsClient client.AwsBillinger, noticeClient client.Notifier) *Handler {
 	return &Handler{
 		awsClient: awsClient,
 		noticeClient: noticeClient,
