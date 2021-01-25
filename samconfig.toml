@@ -1,0 +1,12 @@
+version = 0.1
+[default]
+[default.deploy]
+[default.deploy.parameters]
+stack_name = "test-lambda"
+s3_bucket = "aws-sam-cli-managed-default-samclisourcebucket-m2mz4sveoc04"
+s3_prefix = "test-lambda"
+region = "ap-northeast-1"
+profile = "lambda-user"
+confirm_changeset = true
+capabilities = "CAPABILITY_IAM"
+image_repositories = ["HelloWorldFunction=479151459948.dkr.ecr.ap-northeast-1.amazonaws.com/sam-test-repo"]
