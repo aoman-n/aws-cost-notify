@@ -22,6 +22,7 @@ Resources:
             Schedule: cron(0 12 * * ? *)
       Environment:
         Variables:
+          AWS_PROFILE:
           LINE_NOTIFY_TOKEN:
           LINE_POST_URL: "https://notify-api.line.me/api/notify"
     Metadata:
