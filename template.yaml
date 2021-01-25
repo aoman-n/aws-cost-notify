@@ -9,7 +9,7 @@ Globals:
     Timeout: 5
 
 Resources:
-  HelloWorldFunction:
+  AwsBillingNotifyFunction:
     Type: AWS::Serverless::Function
     Properties:
       PackageType: Image
@@ -23,6 +23,7 @@ Resources:
       Environment:
         Variables:
           PARAM1: VALUE
+          YOUTUBE_API_KEY:
     Metadata:
       DockerTag: v1
       DockerContext: .
