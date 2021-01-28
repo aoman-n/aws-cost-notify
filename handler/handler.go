@@ -37,7 +37,7 @@ func (h *Handler) Run(request events.APIGatewayProxyRequest) (events.APIGatewayP
 
 	fmt.Printf("oneDaysAgoCost: %+v\ntwoDaysAgoCost: %+v", oneDaysAgoCost, twoDaysAgoCost)
 
-	outputMsg := fmt.Sprintf(`## AWS利用料金 ##
+	outputMsg := fmt.Sprintf(`
 
 ### Daily Cost ###
 %s: $%s
@@ -50,6 +50,8 @@ func (h *Handler) Run(request events.APIGatewayProxyRequest) (events.APIGatewayP
 	oneDaysAgoCost.StartDate.Format(outputDateFormat),
 	oneDaysAgoCost.Amount,
 	)
+
+	fmt.Println(outputMsg)
 
 	if err := h.noticeClient.Notify(outputMsg); err != nil {
 		log.Print("failed to notify err:", err)
