@@ -1,15 +1,23 @@
 package client
 
-import "aws-billing-notify/domain"
+import "fmt"
 
-type LineClient struct {}
+
+type LineClient struct {
+	lineNotifyToken string
+	linePostUrl string
+}
 
 var _ Notifier = (*LineClient)(nil)
 
-func NewLineClient() *LineClient {
-	return &LineClient{}
+func NewLineClient(lineNotifyToken, linePostUrl string) *LineClient {
+	return &LineClient{
+		lineNotifyToken: lineNotifyToken,
+		linePostUrl: linePostUrl,
+	}
 }
 
-func (l *LineClient) Notify(billing *domain.Billing) error {
+func (l *LineClient) Notify(msg string) error {
+	fmt.Println(msg)
 	return nil
 }

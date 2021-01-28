@@ -1,11 +1,15 @@
 package client
 
-import "aws-billing-notify/domain"
+import (
+	"aws-billing-notify/model"
+	"time"
+)
 
-type AwsBillinger interface {
-	FetchBilling() (*domain.Billing, error)
+
+type AwsCostFetcher interface {
+	FetchCost(startDate, endDate time.Time) (*model.AwsCost, error)
 }
 
 type Notifier interface {
-	Notify(*domain.Billing) error
+	Notify(msg string) error
 }

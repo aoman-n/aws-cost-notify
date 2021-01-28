@@ -2,40 +2,69 @@ package handler
 
 import (
 	"aws-billing-notify/client"
+	"aws-billing-notify/util/clock"
 	"fmt"
 	"log"
-	"os"
 
 	"github.com/aws/aws-lambda-go/events"
 )
 
 type Handler struct {
-	awsClient client.AwsBillinger
+	awsClient client.AwsCostFetcher
 	noticeClient client.Notifier
 }
 
-func New(awsClient client.AwsBillinger, noticeClient client.Notifier) *Handler {
+func New(awsClient client.AwsCostFetcher, noticeClient client.Notifier) *Handler {
 	return &Handler{
 		awsClient: awsClient,
 		noticeClient: noticeClient,
 	}
 }
 
-func (h *Handler) Run(request events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
-	LINE_TOKEN := os.Getenv("LINE_NOTIFY_TOKEN")
-	LINE_POST_URL := os.Getenv("LINE_POST_URL")
-	fmt.Printf("LINE_TOKEN: %s \nLINE_POST_URL: %s\n", LINE_TOKEN, LINE_POST_URL)
+const outputDateFormat = "2006/01/02"
 
-	billing, err := h.awsClient.FetchBilling()
+func (h *Handler) Run(request events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
+	today := clock.JstNow()
+
+	oneDaysAgoCost, err := h.awsClient.FetchCost(today.AddDate(0, 0, -1), today)
 	if err != nil {
-		log.Print("failed to fetch billing err:", err)
-		return InternalErrorResponse("fetch billing error")
+		return InternalErrorResponse("fetch cost error")
+	}
+	twoDaysAgoCost, err := h.awsClient.FetchCost(today.AddDate(0, 0, -2), today.AddDate(0, 0, -1))
+	if err != nil {
+		return InternalErrorResponse("fetch cost error")
 	}
 
-	if err := h.noticeClient.Notify(billing); err != nil {
+	fmt.Printf("oneDaysAgoCost: %+v\ntwoDaysAgoCost: %+v", oneDaysAgoCost, twoDaysAgoCost)
+
+	outputMsg := fmt.Sprintf(`## AWS利用料金 ##
+
+### Daily Cost ###
+%s: $%s
+%s: $%s
+
+### Monthly Cost ###
+`,
+	twoDaysAgoCost.StartDate.Format(outputDateFormat),
+	twoDaysAgoCost.Amount,
+	oneDaysAgoCost.StartDate.Format(outputDateFormat),
+	oneDaysAgoCost.Amount,
+	)
+
+	if err := h.noticeClient.Notify(outputMsg); err != nil {
 		log.Print("failed to notify err:", err)
-		return InternalErrorResponse("fetch billing error")
+		return InternalErrorResponse("notify error")
 	}
 
 	return SuccessResponse()
 }
+
+// Line Output Message
+// ## AWS利用料金 ##
+//
+// ### Daily Cost ###
+// 2020-01-18: $2.10
+// 2020-01-19: $1.10
+//
+// ### Monthly Cost ###
+// 2020-01-01~2020-01-20: $40.10
