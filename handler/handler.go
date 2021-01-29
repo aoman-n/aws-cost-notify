@@ -31,11 +31,13 @@ func (h *Handler) Run(request events.APIGatewayProxyRequest) (events.APIGatewayP
 	// 日別料金の取得
 	oneDaysAgoCost, err := h.awsClient.FetchCost(today.AddDate(0, 0, -1), today, client.GranularityDaily)
 	if err != nil {
-		return InternalErrorResponse("fetch cost error")
+		log.Print("failed to fetch cost err:", err)
+		return InternalErrorResponse("failed to fetch cost error")
 	}
 	twoDaysAgoCost, err := h.awsClient.FetchCost(today.AddDate(0, 0, -2), today.AddDate(0, 0, -1), client.GranularityDaily)
 	if err != nil {
-		return InternalErrorResponse("fetch cost error")
+		log.Print("failed to fetch cost err:", err)
+		return InternalErrorResponse("failed to fetch cost error")
 	}
 
 	// 月間料金の取得。1日の場合は前月料金を取得。
@@ -55,6 +57,10 @@ func (h *Handler) Run(request events.APIGatewayProxyRequest) (events.APIGatewayP
 			)
 		}
 	}(today)
+	if err != nil {
+		log.Print("failed to fetch cost err:", err)
+		return InternalErrorResponse("failed to fetch cost error")
+	}
 
 	fmt.Printf("oneDaysAgoCost: %+v\ntwoDaysAgoCost: %+v", oneDaysAgoCost, twoDaysAgoCost)
 
