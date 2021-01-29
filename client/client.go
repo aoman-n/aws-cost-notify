@@ -7,7 +7,7 @@ import (
 
 
 type AwsCostFetcher interface {
-	FetchCost(startDate, endDate time.Time) (*model.AwsCost, error)
+	FetchCost(startDate, endDate time.Time, granularity Granularity) (*model.AwsCost, error)
 }
 
 type Notifier interface {
