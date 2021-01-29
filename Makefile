@@ -5,7 +5,8 @@ build:
 
 deploy:
 	sam build
-	sam deploy --guided --env-vars env.json
+	sam deploy --guided \
+		--profile lambda-user
 
 start:
 	sam local invoke --env-vars env.json
