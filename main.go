@@ -1,8 +1,8 @@
 package main
 
 import (
-	"aws-billing-notify/client"
-	"aws-billing-notify/handler"
+	"aws-cost-notify/client"
+	"aws-cost-notify/handler"
 	"log"
 	"os"
 

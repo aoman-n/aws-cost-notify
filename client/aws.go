@@ -1,7 +1,7 @@
 package client
 
 import (
-	"aws-billing-notify/model"
+	"aws-cost-notify/model"
 	"time"
 
 	"github.com/aws/aws-sdk-go/aws"

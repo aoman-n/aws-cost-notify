@@ -1,6 +1,6 @@
-# aws-billing-notify
+# aws-cost-notify
 
-This is a sample template for aws-billing-notify - Below is a brief explanation of what we have generated for you:
+This is a sample template for aws-cost-notify - Below is a brief explanation of what we have generated for you:
 
 ```bash
 .

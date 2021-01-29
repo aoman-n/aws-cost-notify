@@ -1,9 +1,9 @@
 package handler
 
 import (
-	"aws-billing-notify/client"
-	"aws-billing-notify/model"
-	"aws-billing-notify/util/clock"
+	"aws-cost-notify/client"
+	"aws-cost-notify/model"
+	"aws-cost-notify/util/clock"
 	"fmt"
 	"log"
 	"time"

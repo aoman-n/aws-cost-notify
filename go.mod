@@ -1,4 +1,4 @@
-module aws-billing-notify
+module aws-cost-notify
 
 go 1.14
 
