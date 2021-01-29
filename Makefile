@@ -1,4 +1,4 @@
-.PHONY: build dev
+.PHONY: build deploy start
 
 build:
 	sam build
