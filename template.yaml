@@ -11,19 +11,34 @@ Resources:
     Type: AWS::Serverless::Function
     Properties:
       PackageType: Image
+      # https://docs.aws.amazon.com/ja_jp/IAM/latest/UserGuide/list_awscostexplorerservice.html
+      # https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/billing-example-policies.html#example-policy-ce-api
+      # https://docs.aws.amazon.com/ja_jp/AWSCloudFormation/latest/UserGuide/aws-resource-iam-policy.html
       Policies:
-        - CloudWatchReadOnlyAccess
+        - AWSLambdaExecute
+        - Version: '2012-10-17'
+          Statement:
+            - Effect: Allow
+              Action:
+                - 'ce:*'
+              Resource: '*'
       Events:
         ScheduleEvent:
           Type: Schedule
           Properties:
-            Schedule: cron(0 12 * * ? *)
+            Schedule: cron(0 13 * * ? *)
       Environment:
         Variables:
-          AWS_PROFILE:
-          LINE_NOTIFY_TOKEN:
-          LINE_POST_URL: "https://notify-api.line.me/api/notify"
+          AWS_PROFILE: default
+          LINE_NOTIFY_TOKEN: !Ref LineNotifyToken
+          LINE_POST_URL: !Ref LinePostUrl
     Metadata:
       DockerTag: v1
       DockerContext: .
       Dockerfile: Dockerfile
+
+Parameters:
+  LineNotifyToken:
+    Type: String
+  LinePostUrl:
+    Type: String
