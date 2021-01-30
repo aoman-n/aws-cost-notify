@@ -6,12 +6,10 @@ import (
 
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/session"
-	"github.com/aws/aws-sdk-go/service/cloudwatch"
 	"github.com/aws/aws-sdk-go/service/costexplorer"
 )
 
 type AwsClient struct {
-	cloudwatchSrv *cloudwatch.CloudWatch
 	costexplorerSrv *costexplorer.CostExplorer
 }
 
@@ -19,27 +17,15 @@ var _ AwsCostFetcher = (*AwsClient)(nil)
 
 func NewAwsClient() *AwsClient {
 	sess := session.Must(session.NewSession())
-	cloudwatchSrv := cloudwatch.New(
-		sess,
-		aws.NewConfig().WithRegion("us-east-1"),
-	)
 	costexplorerSrv := costexplorer.New(sess)
 
 	return &AwsClient{
-		cloudwatchSrv: cloudwatchSrv,
 		costexplorerSrv: costexplorerSrv,
 	}
 }
 
 const (
 	dateFormatForSDK = "2006-01-02"
-)
-
-type Granularity = string
-
-const (
-	GranularityDaily Granularity = costexplorer.GranularityDaily
-	GranularityMonthy Granularity = costexplorer.GranularityMonthly
 )
 
 func (a *AwsClient) FetchCost(startDate, endDate time.Time, granularity Granularity) (*model.AwsCost, error) {

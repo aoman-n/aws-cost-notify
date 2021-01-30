@@ -3,6 +3,15 @@ package client
 import (
 	"aws-cost-notify/model"
 	"time"
+
+	"github.com/aws/aws-sdk-go/service/costexplorer"
+)
+
+type Granularity = string
+
+const (
+	GranularityDaily Granularity = costexplorer.GranularityDaily
+	GranularityMonthy Granularity = costexplorer.GranularityMonthly
 )
 
 

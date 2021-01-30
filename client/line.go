@@ -31,12 +31,9 @@ func (l *LineClient) Notify(msg string) error {
 	}
 	req.Header.Add("Content-Type", "application/x-www-form-urlencoded")
 	req.Header.Add("Authorization", fmt.Sprintf("Bearer %s", l.lineNotifyToken))
-	resp, err := http.DefaultClient.Do(req)
-	if err != nil {
+	if _, err = http.DefaultClient.Do(req); err != nil {
 		return err
 	}
-
-	fmt.Println("line response: ", resp)
 
 	return nil
 }
